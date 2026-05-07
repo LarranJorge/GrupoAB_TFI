@@ -35,10 +35,15 @@ Este proyecto es una API REST para la gestión de turnos, médicos y especialida
 
 ## Objetivos Cumplidos
 [x] BREAD completo de una entidad.
-[x] División en capas.
-[x] Versionado del API Rest.
-[x] Nombres correctos en rutas.
-[x] Uso de códigos de estados.
-[x] Respuesta consistentes.
 
-*Última actualización: [07/05/2026]*
+[x] División en capas.
+
+[x] Versionado del API Rest.
+
+[x] Nombres correctos en rutas.
+
+[x] Uso de códigos de estados HTTP estándar.
+
+[x] Respuestas consistentes.
+
+Última actualización: 07/05/2026
