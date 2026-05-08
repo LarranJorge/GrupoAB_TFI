@@ -1,4 +1,4 @@
-import { especialidadesDb } from '../db/especialidadesDb.js';
+import { especialidadesDb } from '../database/especialidadesDb.js';
 
 export const especialidadesService = {
     obtenerTodos: async () => {

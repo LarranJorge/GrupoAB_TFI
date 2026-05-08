@@ -4,6 +4,7 @@ export const getUsuarios = async (req, res) => {
     try {
         const usuarios = await usuariosService.obtenerTodos();
         res.status(200).json({ estado: true, data: usuarios });
+        
     } catch (error) {
         res.status(500).json({ estado: false, msg: 'Error al obtener los usuarios' });
     }
@@ -28,6 +29,7 @@ export const createUsuario = async (req, res) => {
     try {
         const id = await usuariosService.registrarUsuario(req.body);
         res.status(201).json({ estado: true, msg: `Usuario registrado. ID: ${id}` });
+
     } catch (error) {
         res.status(500).json({ estado: false, msg: 'Error al registrar usuario' });
     }
@@ -52,8 +54,8 @@ export const updateUsuario = async (req, res) => {
             return res.status(404).json({ estado: false, msg: 'No se encontró el usuario' });
         }
         res.status(200).json({ estado: true, msg: 'Usuario actualizado' });
+
     } catch (error) {
-        console.error(error);
         res.status(500).json({ estado: false, msg: 'Error al actualizar' });
     }
 };
@@ -67,6 +69,7 @@ export const deleteUsuario = async (req, res) => {
             return res.status(404).json({ estado: false, msg: 'No se encontró el usuario' });
         }
         res.status(200).json({ estado: true, msg: 'Usuario dado de baja correctamente' });
+
     } catch (error) {
         res.status(500).json({ estado: false, msg: 'Error al eliminar' });
     }
