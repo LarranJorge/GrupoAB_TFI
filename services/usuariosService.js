@@ -1,4 +1,4 @@
-import { usuariosDb } from '../db/usuariosDb.js';
+import { usuariosDb } from '../database/usuariosDb.js';
 
 export const usuariosService = {
     obtenerTodos: async () => {

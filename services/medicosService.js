@@ -1,4 +1,4 @@
-import { medicosDb } from '../db/medicosDb.js'
+import { medicosDb } from '../database/medicosDb.js'
 
 export const medicosService = {
     obtenerTodos: async () => {

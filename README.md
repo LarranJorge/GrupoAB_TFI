@@ -31,19 +31,19 @@ Este proyecto es una API REST para la gestión de turnos, médicos y especialida
 2. Middlewares: Actúa como un filtro de seguridad que intercepta la petición.
 3. Controllers: Gestiona las solicitudes HTTP, delega la lógica al servicio y retorna códigos de estado estándar.
 4. Services: Contiene la lógica de negocio y coordina la comunicación entre el controlador y la base de datos.
-5. Db: Realiza las consultas SQL directas utilizando un pool de conexiones para optimizar recursos.
+5. Database: Realiza las consultas SQL directas utilizando un pool de conexiones para optimizar recursos.
 
 ## Objetivos Cumplidos
 [x] BREAD completo de una entidad.
 
-[x] División en capas (Routes, Controllers, Services, Db).
+[x] División en capas.
 
-[x] Versionado del API Rest (v1).
+[x] Versionado del API Rest.
 
-[x] Nombres correctos en rutas (Sustantivos, plurales, sin verbos).
+[x] Nombres correctos en rutas.
 
-[x] Uso de códigos de estados HTTP estándar (201, 400, 500, etc.).
+[x] Uso de códigos de estados HTTP estándar.
 
-[x] Respuestas consistentes con formato JSON.
+[x] Respuestas consistentes.
 
 Última actualización: 07/05/2026
