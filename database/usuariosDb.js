@@ -22,7 +22,8 @@ export const usuariosDb = {
             const query = `
                 SELECT 
                     id_usuario, 
-                    documento, 
+                    documento,
+                    apellido, 
                     nombres, 
                     email,
                     foto_path,
