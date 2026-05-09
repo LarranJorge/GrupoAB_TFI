@@ -1,70 +1,66 @@
 import { especialidadesService } from '../services/especialidadesService.js';
 
-export const getEspecialidades = async (req, res) => {
+export const getEspecialidades = async (req, res, next) => {
     try {
         const especialidades = await especialidadesService.obtenerTodos();
         res.status(200).json({ estado: true, data: especialidades });
 
     } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al obtener especialidades' });
+        next(error);
     }
 };
 
-export const getEspecialidadById = async (req, res) => {
+export const getEspecialidadById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const especialidad = await especialidadesService.obtenerPorId(id);
         
-        if (!especialidad) {
-            return res.status(404).json({ estado: false, msg: 'Especialidad no encontrada' });
-        }
-        
         res.status(200).json({ estado: true, data: especialidad });
     } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al obtener la especialidad' });
+        next(error);
     }
 };
 
-export const createEspecialidad = async (req, res) => {
+export const createEspecialidad = async (req, res, next) => {
     try {
         const { nombre } = req.body;
-        const id = await especialidadesService.registrarEspecialidad(nombre);
+        const nuevaEspecialidad = await especialidadesService.registrarEspecialidad({ nombre });
 
-        res.status(201).json({ estado: true, msg: `Especialidad creada con ID: ${id}` });
-
+        res.status(201).json({ 
+            estado: true, 
+            msg: 'Especialidad creada correctamente',
+            data: nuevaEspecialidad 
+        });
     } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al crear' });
+        next(error);
     }
 };
 
-export const updateEspecialidad = async (req, res) => {
+export const updateEspecialidad = async (req, res, next) => {
     try {
         const { id } = req.params;
         const { nombre } = req.body;
         
-        const actualizado = await especialidadesService.modificarEspecialidad(id, nombre);
+        const actualizado = await especialidadesService.modificarEspecialidad(id, { nombre });
         
-        if (!actualizado) {
-            return res.status(404).json({ estado: false, msg: 'No se encontró la especialidad para editar' });
-        }
-        res.status(200).json({ estado: true, msg: 'Especialidad actualizada correctamente' });
-
+        res.status(200).json({ 
+            estado: true, 
+            msg: 'Especialidad actualizada correctamente',
+            data: actualizado
+        });
     } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al actualizar' });
+        next(error);
     }
 };
 
-export const deleteEspecialidad = async (req, res) => {
+export const deleteEspecialidad = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const eliminado = await especialidadesService.eliminarEspecialidad(id);
         
-        if (!eliminado) {
-            return res.status(404).json({ estado: false, msg: 'No se encontro la especialidad' });
-        }
+        await especialidadesService.eliminarEspecialidad(id);
+        
         res.status(200).json({ estado: true, msg: 'Especialidad eliminada correctamente' });
-        
     } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al eliminar' });
+        next(error);
     }
 };

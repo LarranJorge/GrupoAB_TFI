@@ -25,7 +25,7 @@ router.put('/:id', [
     check('nombre')
         .notEmpty().withMessage('El nombre es obligatorio.')
         .isLength({ max: 120 }).withMessage('El nombre no debe ser mayor a 120 caracteres.'),
-    check('descripcion', 'La descripción es obligatoria.').notEmpty(),
+    check('descripcion', 'La descripción es obligatoria.').optional(),
     check('porcentaje_descuento', 'El porcentaje de descuento es obligatorio y debe ser un número.').isDecimal(),
     check('es_particular', 'El campo es_particular es obligatorio y debe ser 0 o 1.').isInt({ min: 0, max: 1 }),
     validarCampos

@@ -6,18 +6,41 @@ export const medicosService = {
     },
     
     obtenerPorId: async (id) => {
-        return await medicosDb.getById(id);
+        const medico = await medicosDb.getById(id);
+
+        if (!medico) {
+            const error = new Error('Médico no encontrado');
+            error.status = 404;
+            throw error;
+        }
+        
+        return medico;
     },
 
     registrarMedico: async (data) => {
-        return await medicosDb.create(data);
+        
+        if (!data.matricula || data.matricula <= 0) {
+            const error = new Error('La matrícula debe ser un número válido');
+            error.status = 400;
+            throw error;
+        }
+
+        const id = await medicosDb.create(data);
+
+        return await medicosDb.getById(id);
     },
 
     modificarMedico: async (id, dataUpdate) => {
-        return await medicosDb.update(id, dataUpdate);
+        await medicosService.obtenerPorId(id);
+
+        await medicosDb.update(id, dataUpdate);
+
+        return await medicosDb.getById(id);
     },
 
     eliminarMedico: async (id) => {
+        await medicosService.obtenerPorId(id);
+        
         return await medicosDb.softDelete(id);
     }
 };

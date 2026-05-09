@@ -6,18 +6,43 @@ export const especialidadesService = {
     },
     
     obtenerPorId: async (id) => {
-        return await especialidadesDb.getById(id);
+        const especialidad = await especialidadesDb.getById(id);
+
+        if (!especialidad) {
+            const error = new Error('La especialidad solicitada no existe');
+            error.status = 404;
+            throw error;
+        }
+
+        return especialidad;
     },
 
     registrarEspecialidad: async (data) => {
-        return await especialidadesDb.create(data);
+        const nombreNormalizado = data.nombre.trim().toUpperCase();
+
+        const id = await especialidadesDb.create(nombreNormalizado);
+        return await especialidadesDb.getById(id);
     },
 
     modificarEspecialidad: async (id, dataUpdate) => {
-        return await especialidadesDb.update(id, dataUpdate);
-    },
+
+        await especialidadesService.obtenerPorId(id);
+
+        let nombreParaActualizar = dataUpdate.nombre;
+
+        if (nombreParaActualizar) {
+            nombreParaActualizar = nombreParaActualizar.trim().toUpperCase();
+        }
+
+        await especialidadesDb.update(id, nombreParaActualizar);
+
+        return await especialidadesDb.getById(id);
+
+    },  
 
     eliminarEspecialidad: async (id) => {
+        await especialidadesService.obtenerPorId(id);
+
         return await especialidadesDb.softDelete(id);
     }
 };

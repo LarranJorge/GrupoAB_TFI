@@ -1,4 +1,5 @@
 import express from 'express';
+import { errorHandler } from './middlewares/errorMiddleware.js';
 import especialidadesRoutes from './routes/v1/especialidadesRoutes.js';
 import medicosRoutes from './routes/v1/medicosRoutes.js';
 import usuariosRoutes from './routes/v1/usuariosRoutes.js'
@@ -13,6 +14,8 @@ app.use('/api/v1/especialidades', especialidadesRoutes);
 app.use('/api/v1/medicos', medicosRoutes);
 app.use('/api/v1/usuarios', usuariosRoutes);
 app.use('/api/v1/obras-sociales', obrasSocialesRoutes)
+
+app.use(errorHandler);
 
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
