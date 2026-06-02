@@ -19,7 +19,7 @@ router.post('/', [
 
 router.put('/:id', [
     param('id', 'El ID debe ser un número entero').isInt(),
-    check('nombre', 'El nombre es obligatorio').notEmpty().isLength({ min: 3, max: 30 }),
+    check('nombre', 'El nombre es obligatorio').optional().isLength({ min: 3, max: 30 }),
     validarCampos
 ], especialidadesCtrl.updateEspecialidad);
 

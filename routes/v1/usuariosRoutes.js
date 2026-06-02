@@ -25,13 +25,13 @@ router.post('/', [
 
 router.put('/:id', [
     param('id', 'El ID debe ser un número entero').isInt(),
-    check('documento', 'El numero de documento es obligatorio').notEmpty().isInt(),
-    check('apellido', 'El apellido es obligatorio').notEmpty().isLength({ max: 30 }),
-    check('nombres', 'El nombre o los nombres son obligatorios').notEmpty().isLength({ max: 30 }),
-    check('email', 'El email es obligatorio').notEmpty(),
-    check('contrasenia', 'La contraseña es obligatoria').notEmpty(),
-    check('foto_path', 'Cargue una foto'),
-    check('rol', 'El rol es obligatorio y debe ser un valor numerico del 1 al 3').notEmpty().isInt({min: 1, max: 3}),
+    check('documento', 'El numero de documento es obligatorio').optional().isInt(),
+    check('apellido', 'El apellido es obligatorio').optional().isLength({ max: 30 }),
+    check('nombres', 'El nombre o los nombres son obligatorios').optional().isLength({ max: 30 }),
+    check('email', 'El email es obligatorio').optional(),
+    check('contrasenia', 'La contraseña es obligatoria').optional(),
+    check('foto_path', 'Cargue una foto').optional(),
+    check('rol', 'El rol es obligatorio y debe ser un valor numerico del 1 al 3').optional().isInt({min: 1, max: 3}),
     validarCampos
 ], usuariosCtrl.updateUsuario);
 
