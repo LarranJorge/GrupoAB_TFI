@@ -1,0 +1,15 @@
+info:
+  name: Eliminar Paciente (Nuevo)
+  type: http
+
+http:
+  method: DELETE
+  url: http://localhost:3000/api/v1/pacientes/2
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+​

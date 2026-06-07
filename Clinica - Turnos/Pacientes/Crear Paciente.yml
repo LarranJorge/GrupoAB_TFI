@@ -1,0 +1,15 @@
+info:
+  name: Crear Paciente
+  type: http
+
+http:
+  method: POST
+  url: http://localhost:3000/api/v1/pacientes
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+​
