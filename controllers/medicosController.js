@@ -1,74 +1,63 @@
 import { medicosService } from '../services/medicosService.js';
 
-export const getMedicos = async (req, res) => {
+export const getMedicos = async (req, res, next) => {
     try {
         const medicos = await medicosService.obtenerTodos();
         res.status(200).json({ estado: true, data: medicos });
-
     } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al obtener los médicos' });
+        next(error);
     }
 };
 
-export const getMedicosById = async (req, res) => {
+export const getMedicosById = async (req, res, next) => {
     try {
         const { id } = req.params;
+
         const medico = await medicosService.obtenerPorId(id);
         
-        if (!medico) {
-            return res.status(404).json({ estado: false, msg: 'Medico no encontrado' });
-        }
-        
         res.status(200).json({ estado: true, data: medico });
-        
     } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al obtener el medico' });
+        next(error);
     }
 };
 
-export const createMedico = async (req, res) => {
+export const createMedico = async (req, res, next) => {
     try {
-        const id = await medicosService.registrarMedico(req.body);
-        res.status(201).json({ estado: true, msg: `Médico registrado. ID: ${id}` });
+        const nuevoMedico = await medicosService.registrarMedico(req.body);
         
-    } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al registrar médico' });
-    }
-};
-
-export const updateMedico = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { id_especialidad, matricula, descripcion, valor_consulta } = req.body;
-        
-        const actualizado = await medicosService.modificarMedico(id, { 
-            id_especialidad, 
-            matricula, 
-            descripcion, 
-            valor_consulta 
+        res.status(201).json({ 
+            estado: true, 
+            msg: 'Médico registrado con éxito',
+            data: nuevoMedico 
         });
-
-        if (!actualizado) {
-            return res.status(404).json({ estado: false, msg: 'No se encontró el médico' });
-        }
-        res.status(200).json({ estado: true, msg: 'Médico actualizado' });
-
     } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al actualizar' });
+        next(error);
     }
 };
 
-export const deleteMedico = async (req, res) => {
+export const updateMedico = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const eliminado = await medicosService.eliminarMedico(id);
-        
-        if (!eliminado) {
-            return res.status(404).json({ estado: false, msg: 'No se encontró el médico' });
-        }
-        res.status(200).json({ estado: true, msg: 'Médico dado de baja correctamente' });
+        const actualizado = await medicosService.modificarMedico(id, req.body);
 
+        res.status(200).json({ 
+            estado: true, 
+            msg: 'Datos del médico actualizados',
+            data: actualizado 
+        });
     } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al eliminar' });
+        next(error);
+    }
+};
+
+export const deleteMedico = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        
+        await medicosService.eliminarMedico(id);
+        
+        res.status(200).json({ estado: true, msg: 'Médico dado de baja correctamente' });
+    } catch (error) {
+        next(error);
     }
 };

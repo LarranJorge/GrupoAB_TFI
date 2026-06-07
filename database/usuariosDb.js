@@ -46,20 +46,46 @@ export const usuariosDb = {
     },
 
     update: async (id, usuarioUpdate) => {
-        const {documento, apellido, nombres, email, contrasenia, foto_path, rol} = usuarioUpdate;
-        const query = `
-        UPDATE usuarios SET 
-        documento = ?,
-        apellido = ?,
-        nombres = ?,
-        email = ?,
-        contrasenia = SHA2(?, 256),
-        foto_path = ?,
-        rol = ?
-        WHERE id_usuario = ?
-        `;
-        const [result] = await pool.execute(query, [documento, apellido, nombres, email, contrasenia, foto_path, rol, id]);
-        return result.affectedRows > 0;
+        let campos = [];
+        let valores = [];
+
+        if (usuarioUpdate.documento !== undefined) {
+            campos.push("documento = ?");
+            valores.push(usuarioUpdate.documento);
+        }
+        if (usuarioUpdate.apellido !== undefined) {
+            campos.push("apellido = ?");
+            valores.push(usuarioUpdate.apellido);
+        }
+        if (usuarioUpdate.nombres !== undefined) {
+            campos.push("nombres = ?");
+            valores.push(usuarioUpdate.nombres);
+        }
+        if (usuarioUpdate.email !== undefined) {
+            campos.push("email = ?");
+            valores.push(usuarioUpdate.email);
+        }
+        if (usuarioUpdate.contrasenia !== undefined) {
+            campos.push("contrasenia = SHA2(?, 256)");
+            valores.push(usuarioUpdate.contrasenia);
+        }
+        if (usuarioUpdate.foto_path !== undefined) {
+            campos.push("foto_path = ?");
+            valores.push(usuarioUpdate.foto_path);
+        }
+        if (usuarioUpdate.rol !== undefined) {
+            campos.push("rol = ?");
+            valores.push(usuarioUpdate.rol);
+        }
+
+        if (campos.length > 0) {
+            valores.push(id);
+            const query = `UPDATE usuarios SET ${campos.join(", ")} WHERE id_usuario = ?`;
+            const [result] = await pool.execute(query, valores);
+            return result.affectedRows > 0;
+        }
+        
+        return false;
     },
 
     softDelete: async (id) => {

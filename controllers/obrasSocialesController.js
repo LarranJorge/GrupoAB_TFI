@@ -1,71 +1,61 @@
 import { obrasSocialesService } from "../services/obrasSocialesService.js";
 
-export const getObrasSociales = async (req, res) => {
+export const getObrasSociales = async (req, res, next) => {
     try {
         const obras = await obrasSocialesService.obtenerTodos();
         res.status(200).json({ estado: true, data: obras });
     } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al obtener las obras sociales' });
+        next(error);
     }
 };
 
-export const getObrasSocialesById = async (req, res) => {
+export const getObrasSocialesById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const obra = await obrasSocialesService.obtenerPorId(id);
         
-        if (!obra) {
-            return res.status(404).json({ estado: false, msg: 'Obra social no encontrada' });
-        }
-        
         res.status(200).json({ estado: true, data: obra });
     } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al obtener la obra social' });
+        next(error);
     }
 };
 
-export const createObraSocial = async (req, res) => {
+export const createObraSocial = async (req, res, next) => {
     try {
-        const id = await obrasSocialesService.registrarObraSocial(req.body);
-        res.status(201).json({ estado: true, msg: `Obra social registrada. ID: ${id}` });
-
-    } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al registrar la obra social' });
-    }
-};
-
-export const updateObraSocial = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { nombre, descripcion, porcentaje_descuento, es_particular } = req.body;
+        const nuevaObra = await obrasSocialesService.registrarObraSocial(req.body);
         
-        const actualizado = await obrasSocialesService.modificarObraSocial(id, { 
-            nombre, 
-            descripcion, 
-            porcentaje_descuento, 
-            es_particular 
+        res.status(201).json({ 
+            estado: true, 
+            msg: 'Obra social registrada con éxito',
+            data: nuevaObra 
         });
-
-        if (!actualizado) {
-            return res.status(404).json({ estado: false, msg: 'No se encontró la obra social' });
-        }
-        res.status(200).json({ estado: true, msg: 'Obra social actualizada' });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ estado: false, msg: 'Error al actualizar' });
+        next(error);
     }
 };
 
-export const deleteObraSocial = async (req, res) => {
+export const updateObraSocial = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const eliminado = await obrasSocialesService.eliminarObraSocial(id);
+        const actualizado = await obrasSocialesService.modificarObraSocial(id, req.body);
+
+        res.status(200).json({ 
+            estado: true, 
+            msg: 'Obra social actualizada correctamente',
+            data: actualizado
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const deleteObraSocial = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        await obrasSocialesService.eliminarObraSocial(id);
         
-        if (!eliminado) {
-            return res.status(404).json({ estado: false, msg: 'No se encontró la obra social' });
-        }
         res.status(200).json({ estado: true, msg: 'Obra social dada de baja correctamente' });
     } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al eliminar' });
+        next(error);
     }
 };

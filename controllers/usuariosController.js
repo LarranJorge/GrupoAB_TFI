@@ -1,76 +1,61 @@
 import { usuariosService } from '../services/usuariosService.js';
 
-export const getUsuarios = async (req, res) => {
+export const getUsuarios = async (req, res, next) => {
     try {
         const usuarios = await usuariosService.obtenerTodos();
         res.status(200).json({ estado: true, data: usuarios });
-        
     } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al obtener los usuarios' });
+        next(error);
     }
 };
 
-export const getUsuariosById = async (req, res) => {
+export const getUsuariosById = async (req, res, next) => {
     try {
         const { id } = req.params;
         const usuario = await usuariosService.obtenerPorId(id);
         
-        if (!usuario) {
-            return res.status(404).json({ estado: false, msg: 'Usuario no encontrado' });
-        }
-        
         res.status(200).json({ estado: true, data: usuario });
     } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al obtener el usuario' });
+        next(error);
     }
 };
 
-export const createUsuario = async (req, res) => {
+export const createUsuario = async (req, res, next) => {
     try {
-        const id = await usuariosService.registrarUsuario(req.body);
-        res.status(201).json({ estado: true, msg: `Usuario registrado. ID: ${id}` });
-
-    } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al registrar usuario' });
-    }
-};
-
-export const updateUsuario = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { documento, apellido, nombres, email, contrasenia, foto_path, rol } = req.body;
+        const nuevoUsuario = await usuariosService.registrarUsuario(req.body);
         
-        const actualizado = await usuariosService.modificarUsuario(id, { 
-            documento, 
-            apellido, 
-            nombres, 
-            email,
-            contrasenia,
-            foto_path,
-            rol 
+        res.status(201).json({ 
+            estado: true, 
+            msg: 'Usuario registrado correctamente',
+            data: nuevoUsuario 
         });
-
-        if (!actualizado) {
-            return res.status(404).json({ estado: false, msg: 'No se encontró el usuario' });
-        }
-        res.status(200).json({ estado: true, msg: 'Usuario actualizado' });
-
     } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al actualizar' });
+        next(error);
     }
 };
 
-export const deleteUsuario = async (req, res) => {
+export const updateUsuario = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const eliminado = await usuariosService.eliminarUsuario(id);
-        
-        if (!eliminado) {
-            return res.status(404).json({ estado: false, msg: 'No se encontró el usuario' });
-        }
-        res.status(200).json({ estado: true, msg: 'Usuario dado de baja correctamente' });
+        const actualizado = await usuariosService.modificarUsuario(id, req.body);
 
+        res.status(200).json({ 
+            estado: true, 
+            msg: 'Usuario actualizado correctamente',
+            data: actualizado 
+        });
     } catch (error) {
-        res.status(500).json({ estado: false, msg: 'Error al eliminar' });
+        next(error);
+    }
+};
+
+export const deleteUsuario = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        await usuariosService.eliminarUsuario(id);
+        
+        res.status(200).json({ estado: true, msg: 'Usuario dado de baja correctamente' });
+    } catch (error) {
+        next(error);
     }
 };
