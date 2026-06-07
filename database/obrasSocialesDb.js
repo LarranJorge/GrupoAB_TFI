@@ -20,10 +20,34 @@ export const obrasSocialesDb = {
     },
 
     update: async (id, obrasUpdate) => {
-        const {nombre, descripcion, porcentaje_descuento, es_particular} = obrasUpdate;
-        const query = 'UPDATE obras_sociales SET nombre = ?, descripcion = ?, porcentaje_descuento = ?, es_particular = ? WHERE id_obra_social = ?';
-        const [result] = await pool.execute(query, [nombre, descripcion, porcentaje_descuento, es_particular, id]);
-        return result.affectedRows > 0;
+        let campos = [];
+        let valores = [];
+
+        if (obrasUpdate.nombre !== undefined) {
+            campos.push("nombre = ?");
+            valores.push(obrasUpdate.nombre);
+        }
+        if (obrasUpdate.descripcion !== undefined) {
+            campos.push("descripcion = ?");
+            valores.push(obrasUpdate.descripcion);
+        }
+        if (obrasUpdate.porcentaje_descuento !== undefined) {
+            campos.push("porcentaje_descuento = ?");
+            valores.push(obrasUpdate.porcentaje_descuento);
+        }
+        if (obrasUpdate.es_particular !== undefined) {
+            campos.push("es_particular = ?");
+            valores.push(obrasUpdate.es_particular);
+        }
+
+        if (campos.length > 0) {
+            valores.push(id);
+            const query = `UPDATE obras_sociales SET ${campos.join(", ")} WHERE id_obra_social = ?`;
+            const [result] = await pool.execute(query, valores);
+            return result.affectedRows > 0;
+        }
+        
+        return false;
     },
 
     softDelete: async (id) => {

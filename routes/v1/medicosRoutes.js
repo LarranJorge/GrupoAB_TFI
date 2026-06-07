@@ -23,7 +23,7 @@ router.post('/', [
 
 router.put('/:id', [
     param('id', 'El ID debe ser un número entero').isInt(),
-    check('id_especialidad', 'El ID de la especialidad es obligatorio').notEmpty().isInt(),
+    check('id_especialidad', 'El ID de la especialidad es obligatorio').optional().isInt(),
     check('matricula', 'El numero de matricula es obligatorio').optional().isInt().isLength({ max: 30 }),
     check('descripcion', 'La descripcion es obligatoria').optional().isLength({ max: 200 }),
     check('valor_consulta', 'El valor de la consulta es obligatorio').optional().isFloat({min: 0}),

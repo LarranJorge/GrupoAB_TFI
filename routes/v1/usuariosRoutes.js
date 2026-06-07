@@ -26,7 +26,7 @@ router.post('/', [
 router.put('/:id', [
     param('id', 'El ID debe ser un número entero').isInt(),
     check('documento', 'El numero de documento es obligatorio').optional().isInt(),
-    check('apellido', 'El apellido es obligatorio').notEmpty().optional({ max: 30 }),
+    check('apellido', 'El apellido es obligatorio').optional().isLength({ max: 30 }),
     check('nombres', 'El nombre o los nombres son obligatorios').optional().isLength({ max: 30 }),
     check('email', 'El email es obligatorio').optional(),
     check('contrasenia', 'La contraseña es obligatoria').optional(),

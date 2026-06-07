@@ -46,17 +46,34 @@ export const medicosDb = {
     },
 
     update: async (id, medicoUpdate) => {
-        const {id_especialidad, matricula, descripcion, valor_consulta} = medicoUpdate;
-        const query = `
-        UPDATE medicos SET 
-        id_especialidad = ?,
-        matricula = ?,
-        descripcion = ?,
-        valor_consulta = ?
-        WHERE id_medico = ?
-        `;
-        const [result] = await pool.execute(query, [id_especialidad, matricula, descripcion, valor_consulta, id]);
-        return result.affectedRows > 0;
+        let campos = [];
+        let valores = [];
+
+        if (medicoUpdate.id_especialidad !== undefined) {
+            campos.push("id_especialidad = ?");
+            valores.push(medicoUpdate.id_especialidad);
+        }
+        if (medicoUpdate.matricula !== undefined) {
+            campos.push("matricula = ?");
+            valores.push(medicoUpdate.matricula);
+        }
+        if (medicoUpdate.descripcion !== undefined) {
+            campos.push("descripcion = ?");
+            valores.push(medicoUpdate.descripcion);
+        }
+        if (medicoUpdate.valor_consulta !== undefined) {
+            campos.push("valor_consulta = ?");
+            valores.push(medicoUpdate.valor_consulta);
+        }
+
+        if (campos.length > 0) {
+            valores.push(id);
+            const query = `UPDATE medicos SET ${campos.join(", ")} WHERE id_medico = ?`;
+            const [result] = await pool.execute(query, valores);
+            return result.affectedRows > 0;
+        }
+        
+        return false;
     },
 
     softDelete: async (id) => {

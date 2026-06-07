@@ -23,11 +23,11 @@ router.post('/', [
 router.put('/:id', [
     param('id', 'El parámetro debe ser entero').isInt(),
     check('nombre')
-        .notEmpty().withMessage('El nombre es obligatorio.')
+        .optional()
         .isLength({ max: 120 }).withMessage('El nombre no debe ser mayor a 120 caracteres.'),
-    check('descripcion', 'La descripción es obligatoria.').optional(),
-    check('porcentaje_descuento', 'El porcentaje de descuento es obligatorio y debe ser un número.').isDecimal(),
-    check('es_particular', 'El campo es_particular es obligatorio y debe ser 0 o 1.').isInt({ min: 0, max: 1 }),
+    check('descripcion', 'La descripción debe ser un texto.').optional(),
+    check('porcentaje_descuento', 'El porcentaje de descuento debe ser un número decimal.').optional().isDecimal(),
+    check('es_particular', 'El campo es_particular debe ser 0 o 1.').optional().isInt({ min: 0, max: 1 }),
     validarCampos
 ], obrasSocialesCtrl.updateObraSocial);
 
