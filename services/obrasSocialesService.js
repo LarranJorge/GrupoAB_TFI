@@ -1,4 +1,7 @@
 import { obrasSocialesDb } from '../database/obrasSocialesDb.js';
+import apicache from 'apicache';
+
+const cache = apicache.middleware;
 
 export const obrasSocialesService = {
     obtenerTodos: async () => {
@@ -27,6 +30,9 @@ export const obrasSocialesService = {
         }
 
         const id = await obrasSocialesDb.create(data);
+
+        cache.clear();
+
         return await obrasSocialesDb.getById(id);
     },
 
@@ -44,11 +50,17 @@ export const obrasSocialesService = {
         }
 
         await obrasSocialesDb.update(id, dataUpdate);
+
+        cache.clear();
+
         return await obrasSocialesDb.getById(id);
     },
 
     eliminarObraSocial: async (id) => {
         await obrasSocialesService.obtenerPorId(id);
+
+        cache.clear();
+        
         return await obrasSocialesDb.softDelete(id);
     }
 };

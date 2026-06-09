@@ -1,5 +1,7 @@
 import express from 'express';
+import morgan from 'morgan';
 import { errorHandler } from './middlewares/errorMiddleware.js';
+import { fileLogger } from './middlewares/loggerMiddleware.js';
 import especialidadesRoutes from './routes/v1/especialidadesRoutes.js';
 import medicosRoutes from './routes/v1/medicosRoutes.js';
 import usuariosRoutes from './routes/v1/usuariosRoutes.js'
@@ -8,6 +10,9 @@ import pacientesRoutes from './routes/v1/pacientesRoutes.js';
 
 const app = express();
 const port = process.env.PUERTO || 3000;
+
+app.use(morgan('dev'));
+app.use(fileLogger);
 
 app.use(express.json());
 

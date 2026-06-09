@@ -1,4 +1,7 @@
 import { especialidadesDb } from '../database/especialidadesDb.js';
+import apicache from 'apicache';
+
+const cache = apicache.middleware;
 
 export const especialidadesService = {
     obtenerTodos: async () => {
@@ -21,6 +24,9 @@ export const especialidadesService = {
         const nombreNormalizado = data.nombre.trim().toUpperCase();
 
         const id = await especialidadesDb.create(nombreNormalizado);
+
+        cache.clear();
+
         return await especialidadesDb.getById(id);
     },
 
@@ -36,12 +42,16 @@ export const especialidadesService = {
 
         await especialidadesDb.update(id, nombreParaActualizar);
 
+        cache.clear();
+
         return await especialidadesDb.getById(id);
 
     },  
 
     eliminarEspecialidad: async (id) => {
         await especialidadesService.obtenerPorId(id);
+
+        cache.clear();
 
         return await especialidadesDb.softDelete(id);
     }

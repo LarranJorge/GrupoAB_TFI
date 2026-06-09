@@ -1,11 +1,14 @@
 import { Router } from 'express';
+import apicache from 'apicache';
 import { check, param } from 'express-validator';
 import * as medicosCtrl from '../../controllers/medicosController.js'
 import { validarCampos } from '../../middlewares/validarCampos.js';
 
 const router = Router();
 
-router.get('/', medicosCtrl.getMedicos);
+const cache = apicache.middleware;
+
+router.get('/', cache('2 minutes'), medicosCtrl.getMedicos);
 
 router.get('/:id', [
     param('id', 'El ID debe ser un número entero').isInt(),

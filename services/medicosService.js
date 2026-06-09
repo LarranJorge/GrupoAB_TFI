@@ -1,4 +1,7 @@
-import { medicosDb } from '../database/medicosDb.js'
+import { medicosDb } from '../database/medicosDb.js';
+import apicache from 'apicache';
+
+const cache = apicache.middleware;
 
 export const medicosService = {
     obtenerTodos: async () => {
@@ -27,6 +30,8 @@ export const medicosService = {
 
         const id = await medicosDb.create(data);
 
+        cache.clear();
+
         return await medicosDb.getById(id);
     },
 
@@ -35,11 +40,15 @@ export const medicosService = {
 
         await medicosDb.update(id, dataUpdate);
 
+        cache.clear();
+
         return await medicosDb.getById(id);
     },
 
     eliminarMedico: async (id) => {
         await medicosService.obtenerPorId(id);
+
+        cache.clear();
         
         return await medicosDb.softDelete(id);
     }

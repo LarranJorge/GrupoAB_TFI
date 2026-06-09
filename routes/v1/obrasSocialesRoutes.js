@@ -1,11 +1,14 @@
 import { Router } from 'express';
+import apicache from 'apicache';
 import { check, param } from 'express-validator';
 import * as obrasSocialesCtrl from '../../controllers/obrasSocialesController.js';
 import { validarCampos } from '../../middlewares/validarCampos.js';
 
 const router = Router();
 
-router.get('/', obrasSocialesCtrl.getObrasSociales);
+const cache = apicache.middleware;
+
+router.get('/', cache('2 minutes'), obrasSocialesCtrl.getObrasSociales);
 
 router.get('/:id', [
     param('id', 'El parámetro debe ser entero').isInt(),
