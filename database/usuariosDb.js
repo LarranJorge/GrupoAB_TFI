@@ -35,6 +35,16 @@ export const usuariosDb = {
             return rows[0];
     },
 
+    getByEmail: async (email, contrasenia) => {
+        const query = `
+        SELECT u.id_usuario, CONCAT(u.nombres, ' ', u.apellido) as usuario, u.rol
+        FROM usuarios  AS u
+        WHERE u.email = ? AND u.contrasenia = SHA2(?, 256) AND u.activo = 1
+        `;
+        const [rows] = await pool.execute(query, [email, contrasenia]);
+        return rows[0];
+    },
+
     create: async (usuarioData) => {
         const {documento, apellido, nombres, email, contrasenia, foto_path, rol, activo} = usuarioData;
         const query = `

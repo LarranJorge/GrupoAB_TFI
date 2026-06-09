@@ -22,6 +22,14 @@ export const usuariosService = {
         return usuario;
     },
 
+    buscar: async (email, contrasenia) => {
+        const usuario = await usuariosDb.getByEmail(email, contrasenia);
+        
+        if (!usuario) return null;
+        
+        return usuario;
+    },
+
     registrarUsuario: async (data) => {
         if (data.nombres) data.nombres = formatearNombre(data.nombres);
         if (data.apellido) data.apellido = formatearNombre(data.apellido);
