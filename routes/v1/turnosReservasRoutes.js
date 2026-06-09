@@ -2,6 +2,7 @@ import express from 'express';
 import { check, param } from 'express-validator';
 import { validarCampos } from '../../middlewares/validarCampos.js';
 import { turnosReservasController } from '../../controllers/turnosReservasController.js';
+//import { validarToken } from '../../middlewares/validarToken.js';
 
 const router = express.Router();
 
@@ -31,6 +32,16 @@ router.put('/:id/atendido',
         validarCampos
     ],
     turnosReservasController.marcarAtendido
+);
+
+router.delete('/:id',
+    [
+        param('id')
+            .notEmpty().withMessage('El id es obligatorio.')
+            .isInt().withMessage('El id debe ser un número entero.'),
+        validarCampos
+    ],
+    turnosReservasController.eliminar
 );
 
 export default router;

@@ -3,6 +3,11 @@ import { medicosService } from './medicosService.js';
 import { pacientesService } from './pacientesService.js';
 import { obrasSocialesService } from './obrasSocialesService.js';
 
+const formatearNombre = (str) => {
+    if (!str) return str;
+    return str.trim().toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
+};
+
 export const turnosReservasService = {
 
     obtenerTodos: async (usuario) => {
@@ -11,6 +16,16 @@ export const turnosReservasService = {
         } else {
             return await turnosReservasDb.getByPaciente(usuario.id_usuario);
         }
+    },
+
+    obtenerPorId: async (id) => {
+        const turno = await turnosReservasDb.getById(id);
+        if (!turno) {
+            const error = new Error('Turno no encontrado');
+            error.status = 404;
+            throw error;
+        }
+        return turno;
     },
 
     crear: async (data) => {
@@ -38,6 +53,8 @@ export const turnosReservasService = {
     },
 
     marcarAtendido: async (id) => {
+        await turnosReservasService.obtenerPorId(id);
+
         const resultado = await turnosReservasDb.marcarAtendido(id);
         if (!resultado) {
             const error = new Error('Turno no encontrado');
@@ -45,5 +62,10 @@ export const turnosReservasService = {
             throw error;
         }
         return resultado;
+    },
+
+    eliminarTurno: async (id) => {
+        await turnosReservasService.obtenerPorId(id);
+        return await turnosReservasDb.softDelete(id);
     }
 };

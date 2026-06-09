@@ -43,9 +43,21 @@ export const turnosReservasDb = {
         return rows;
     },
 
+    getById: async (id) => {
+        const query = `SELECT * FROM turnos_reservas WHERE id_turno_reserva = ? AND activo = 1`;
+        const [rows] = await pool.execute(query, [id]);
+        return rows[0];
+    },
+
     marcarAtendido: async (id_turno_reserva) => {
         const query = `UPDATE turnos_reservas SET atendido = 1 WHERE id_turno_reserva = ? AND activo = 1`;
         const [result] = await pool.execute(query, [id_turno_reserva]);
         return result.affectedRows > 0;
+    },
+
+    softDelete: async (id_turno_reserva) => {
+    const query = `UPDATE turnos_reservas SET activo = 0 WHERE id_turno_reserva = ?`;
+    const [result] = await pool.execute(query, [id_turno_reserva]);
+    return result.affectedRows > 0;
     }
 };

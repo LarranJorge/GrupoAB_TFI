@@ -17,9 +17,6 @@ app.use(fileLogger);
 
 app.use(express.json());
 
-app.use(morgan('dev'));
-const logStream = fs.createWriteStream('./accesos.log', { flags: 'a' });
-app.use(morgan('combined', { stream: logStream }));
 
 app.use('/api/v1/especialidades', especialidadesRoutes);
 app.use('/api/v1/medicos', medicosRoutes);
