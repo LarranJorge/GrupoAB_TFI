@@ -2,6 +2,7 @@ import { Router } from "express";
 import { check, param } from "express-validator";
 import * as pacientesCtrl from "../../controllers/pacientesController.js";
 import { validarCampos } from "../../middlewares/validarCampos.js";
+import { autorizarUsuarios } from '../../middlewares/authMiddleware.js';
 
 const router = Router();
 
@@ -12,7 +13,9 @@ router.get("/:id", [
   validarCampos
 ], pacientesCtrl.getPacienteById);
 
-router.post("/", [
+router.post("/",
+  autorizarUsuarios([3]),
+  [
     check("documento", "El número de documento es obligatorio").notEmpty().isInt(),
     check("apellido", "El apellido es obligatorio").notEmpty().isLength({ max: 100 }),
     check("nombres", "El nombre es obligatorio").notEmpty().isLength({ max: 100 }),
@@ -20,10 +23,11 @@ router.post("/", [
     check("contrasenia", "La contraseña es obligatoria").notEmpty(),
     check("id_obra_social", "El ID de la obra social es obligatorio y debe ser entero").notEmpty().isInt(),
     validarCampos
-  ], pacientesCtrl.createPaciente);
+  ],
+  pacientesCtrl.createPaciente);
 
-router.put(
-  "/:id",
+router.put("/:id",
+  autorizarUsuarios([3]),
   [
     param("id", "El ID debe ser un número entero").isInt(),
     check("documento", "El número de documento debe ser entero").optional().isInt(),
@@ -32,12 +36,16 @@ router.put(
     check("email", "El email debe ser válido").optional().isEmail(),
     check("id_obra_social", "El ID de la obra social es obligatorio y debe ser entero").optional().isInt(),
     validarCampos,
-  ], pacientesCtrl.updatePaciente,
+  ],
+  pacientesCtrl.updatePaciente,
 );
 
-router.delete("/:id", [
+router.delete("/:id",
+  autorizarUsuarios([3]),
+  [
   param("id", "El ID debe ser un número entero").isInt(),
   validarCampos
-], pacientesCtrl.deletePaciente);
+],
+pacientesCtrl.deletePaciente);
 
 export default router;

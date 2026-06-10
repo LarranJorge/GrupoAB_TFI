@@ -2,7 +2,8 @@ import { medicosService } from '../services/medicosService.js';
 
 export const getMedicos = async (req, res, next) => {
     try {
-        const medicos = await medicosService.obtenerTodos();
+        const { id_especialidad } = req.query;
+        const medicos = await medicosService.obtenerTodos(id_especialidad);
         res.status(200).json({ estado: true, data: medicos });
     } catch (error) {
         next(error);

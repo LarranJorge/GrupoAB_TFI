@@ -4,7 +4,10 @@ import apicache from 'apicache';
 const cache = apicache.middleware;
 
 export const medicosService = {
-    obtenerTodos: async () => {
+    obtenerTodos: async (id_especialidad) => {
+        if (id_especialidad) {
+            return await medicosDb.getByEspecialidad(id_especialidad);
+        }
         return await medicosDb.getAll();
     },
     

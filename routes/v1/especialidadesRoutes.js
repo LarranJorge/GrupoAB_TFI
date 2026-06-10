@@ -10,12 +10,12 @@ const router = Router();
 const cache = apicache.middleware;
 
 router.get('/',
-    autorizarUsuarios([2]),
+    autorizarUsuarios([2, 3]),
     cache('2 minutes'),
     especialidadesCtrl.getEspecialidades);
 
 router.get('/:id', 
-    autorizarUsuarios([2]),
+    autorizarUsuarios([3]),
     [
         param('id', 'El ID debe ser un número entero').isInt(),
         validarCampos

@@ -2,7 +2,11 @@ import { pool } from './conexion.js'
 
 export const medicosDb = {
     getAll: async () => {
-        const query = `SELECT * FROM v_medicos`
+        const query = `
+            SELECT m.*, e.nombre as especialidad 
+            FROM medicos m 
+            INNER JOIN especialidades e ON m.id_especialidad = e.id_especialidad
+            WHERE m.activo = 1`;
         const [rows] = await pool.query(query);
         return rows;
     },
@@ -11,6 +15,16 @@ export const medicosDb = {
         const query = `SELECT * FROM v_medicos WHERE id_medico = ?`;
         const [rows] = await pool.execute(query, [id]);
         return rows[0];
+    },
+
+    getByEspecialidad: async (id_especialidad) => {
+        const query = `
+            SELECT m.*, e.nombre as especialidad 
+            FROM medicos m 
+            INNER JOIN especialidades e ON m.id_especialidad = e.id_especialidad
+            WHERE m.id_especialidad = ? AND m.activo = 1`;
+        const [rows] = await pool.execute(query, [id_especialidad]);
+        return rows;
     },
 
     create: async (medicoData) => {

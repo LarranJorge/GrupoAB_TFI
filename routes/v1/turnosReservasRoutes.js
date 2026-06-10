@@ -29,7 +29,7 @@ router.post('/',
 );
 
 router.put('/:id/atendido',
-    autorizarUsuarios([1, 3]),
+    autorizarUsuarios([1]),
     [
         param('id')
             .notEmpty().withMessage('El id es obligatorio.')
@@ -40,7 +40,7 @@ router.put('/:id/atendido',
 );
 
 router.delete('/:id',
-    autorizarUsuarios([3]),
+    autorizarUsuarios([2, 3]),
     [
         param('id')
             .notEmpty().withMessage('El id es obligatorio.')
