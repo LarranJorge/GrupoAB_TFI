@@ -47,69 +47,64 @@ export const pacientesDb = {
         }
     },
 
-    update: async (id, pacienteUpdate) => {
+    update: async (
+        idPaciente,
+        idUsuario,
+        datosUsuario,
+        idObraSocial
+    ) => {
+
         const connection = await pool.getConnection();
 
         try {
+
             await connection.beginTransaction();
 
-            const queryBusqueda = `
-                SELECT u.id_usuario 
-                FROM usuarios u 
-                JOIN pacientes p ON u.id_usuario = p.id_usuario 
-                WHERE p.id_paciente = ?
-            `;
-            const [pacienteAct] = await connection.execute(queryBusqueda, [id]);
+            if (Object.keys(datosUsuario).length > 0) {
 
-            if (pacienteAct.length === 0) {
-                await connection.rollback();
-                return false;
-            }
+                const campos = [];
+                const valores = [];
 
-            const idUsuario = pacienteAct[0].id_usuario;
+                for (const [campo, valor] of Object.entries(datosUsuario)) {
 
-            let camposUsuario = [];
-            let valoresUsuario = [];
+                    if (campo === "contrasenia") {
+                        campos.push("contrasenia = SHA2(?,256)");
+                    } else {
+                        campos.push(`${campo} = ?`);
+                    }
 
-            if (pacienteUpdate.documento) {
-                camposUsuario.push("documento = ?");
-                valoresUsuario.push(pacienteUpdate.documento);
-            }
-            if (pacienteUpdate.apellido) {
-                camposUsuario.push("apellido = ?");
-                valoresUsuario.push(pacienteUpdate.apellido);
-            }
-            if (pacienteUpdate.nombres) {
-                camposUsuario.push("nombres = ?");
-                valoresUsuario.push(pacienteUpdate.nombres);
-            }
-            if (pacienteUpdate.email) {
-                camposUsuario.push("email = ?");
-                valoresUsuario.push(pacienteUpdate.email);
-            }
-            if (pacienteUpdate.contrasenia) {
-                camposUsuario.push("contrasenia = SHA2(?, 256)");
-                valoresUsuario.push(pacienteUpdate.contrasenia);
+                    valores.push(valor);
+                }
+
+                valores.push(idUsuario);
+
+                await connection.execute(
+                    `UPDATE usuarios
+                    SET ${campos.join(",")}
+                    WHERE id_usuario = ?`,
+                    valores
+                );
             }
 
-            if (camposUsuario.length > 0) {
-                valoresUsuario.push(idUsuario);
-                const queryUsuario = `UPDATE usuarios SET ${camposUsuario.join(", ")} WHERE id_usuario = ?`;
-                await connection.execute(queryUsuario, valoresUsuario);
-            }
+            if (idObraSocial !== undefined) {
 
-            if (pacienteUpdate.id_obra_social) {
-                const queryPaciente = `UPDATE pacientes SET id_obra_social = ? WHERE id_paciente = ?`;
-                await connection.execute(queryPaciente, [pacienteUpdate.id_obra_social, id]);
+                await connection.execute(
+                    `UPDATE pacientes
+                    SET id_obra_social = ?
+                    WHERE id_paciente = ?`,
+                    [idObraSocial, idPaciente]
+                );
             }
 
             await connection.commit();
-            return true;
 
         } catch (error) {
+
             await connection.rollback();
             throw error;
+
         } finally {
+
             connection.release();
         }
     },

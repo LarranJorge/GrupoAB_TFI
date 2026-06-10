@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import apicache from 'apicache';
-import passport from 'passport';
 import { check, param } from 'express-validator';
 import * as obrasSocialesCtrl from '../../controllers/obrasSocialesController.js';
 import { validarCampos } from '../../middlewares/validarCampos.js';
@@ -11,13 +10,11 @@ const router = Router();
 const cache = apicache.middleware;
 
 router.get('/',
-    passport.authenticate('jwt', { session: false }), 
     autorizarUsuarios([3]),
     cache('2 minutes'),
     obrasSocialesCtrl.getObrasSociales);
 
 router.get('/:id',
-    passport.authenticate('jwt', { session: false }), 
     autorizarUsuarios([3]),
     [
         param('id', 'El parámetro debe ser entero').isInt(),
@@ -26,7 +23,6 @@ router.get('/:id',
     obrasSocialesCtrl.getObrasSocialesById);
 
 router.post('/',
-    passport.authenticate('jwt', { session: false }), 
     autorizarUsuarios([3]),
     [
         check('nombre', 'El nombre es obligatorio.').notEmpty(),
@@ -38,7 +34,6 @@ router.post('/',
     obrasSocialesCtrl.createObraSocial);
 
 router.put('/:id',
-    passport.authenticate('jwt', { session: false }), 
     autorizarUsuarios([3]),
     [
         param('id', 'El parámetro debe ser entero').isInt(),
@@ -51,7 +46,6 @@ router.put('/:id',
     obrasSocialesCtrl.updateObraSocial);
 
 router.delete('/:id',
-    passport.authenticate('jwt', { session: false }), 
     autorizarUsuarios([3]),
     [
         param('id', 'El parámetro debe ser entero').isInt(),

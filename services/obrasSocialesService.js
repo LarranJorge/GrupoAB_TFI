@@ -36,24 +36,48 @@ export const obrasSocialesService = {
         return await obrasSocialesDb.getById(id);
     },
 
-    modificarObraSocial: async (id, dataUpdate) => {
-        await obrasSocialesService.obtenerPorId(id);
+    modificarObraSocial: async (id, data) => {
+        const existente = await obrasSocialesDb.getById(id);
+        if (!existente) {
+            const error = new Error('Obra social no encontrada');
+            error.status = 404;
+            throw error;
+        }
 
-        if (dataUpdate.nombre) dataUpdate.nombre = dataUpdate.nombre.trim();
-        
-        if (dataUpdate.porcentaje_descuento !== undefined) {
-            if (dataUpdate.porcentaje_descuento < 0 || dataUpdate.porcentaje_descuento > 100) {
-                const error = new Error('El porcentaje de descuento debe estar entre 0 y 100');
+        const campos = [];
+        const valores = [];
+
+        if (data.nombre !== undefined) {
+            campos.push("nombre = ?");
+            valores.push(data.nombre.trim());
+        }
+
+        if (data.porcentaje_descuento !== undefined) {
+            if (data.porcentaje_descuento < 0 || data.porcentaje_descuento > 100) {
+                const error = new Error('El porcentaje debe ser entre 0 y 100');
                 error.status = 400;
                 throw error;
             }
+            campos.push("porcentaje_descuento = ?");
+            valores.push(data.porcentaje_descuento);
         }
 
-        await obrasSocialesDb.update(id, dataUpdate);
+        if (data.es_particular !== undefined) {
+            const esPart = parseInt(data.es_particular);
+            if (esPart !== 0 && esPart !== 1) {
+                const error = new Error('es_particular debe ser 0 o 1');
+                error.status = 400;
+                throw error;
+            }
+            campos.push("es_particular = ?");
+            valores.push(esPart);
+        }
+
+        if (campos.length === 0) throw new Error("No hay datos para actualizar");
 
         cache.clear();
 
-        return await obrasSocialesDb.getById(id);
+        return await obrasSocialesDb.update(id, campos, valores);
     },
 
     eliminarObraSocial: async (id) => {

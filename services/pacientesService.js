@@ -32,15 +32,41 @@ export const pacientesService = {
     },
 
     modificarPaciente: async (id, dataUpdate) => {
+        const paciente = await pacientesService.obtenerPorId(id);
 
-        await pacientesService.obtenerPorId(id);
+        if (dataUpdate.nombres)
+            dataUpdate.nombres = formatearNombre(dataUpdate.nombres);
 
-        if (dataUpdate.nombres) dataUpdate.nombres = formatearNombre(dataUpdate.nombres);
-        if (dataUpdate.apellido) dataUpdate.apellido = formatearNombre(dataUpdate.apellido);
-        if (dataUpdate.email) dataUpdate.email = dataUpdate.email.trim().toLowerCase();
+        if (dataUpdate.apellido)
+            dataUpdate.apellido = formatearNombre(dataUpdate.apellido);
 
-        await pacientesDb.update(id, dataUpdate);
-        
+        if (dataUpdate.email)
+            dataUpdate.email = dataUpdate.email.trim().toLowerCase();
+
+        const datosUsuario = {};
+
+        if (dataUpdate.documento !== undefined)
+        datosUsuario.documento = dataUpdate.documento;
+
+        if (dataUpdate.apellido !== undefined)
+        datosUsuario.apellido = dataUpdate.apellido;
+
+        if (dataUpdate.nombres !== undefined)
+        datosUsuario.nombres = dataUpdate.nombres;
+
+        if (dataUpdate.email !== undefined)
+        datosUsuario.email = dataUpdate.email;
+
+        if (dataUpdate.contrasenia !== undefined)
+        datosUsuario.contrasenia = dataUpdate.contrasenia;
+
+        await pacientesDb.update(
+            id,
+            paciente.id_usuario,
+            datosUsuario,
+            dataUpdate.id_obra_social
+        );
+
         return await pacientesDb.getById(id);
     },
 

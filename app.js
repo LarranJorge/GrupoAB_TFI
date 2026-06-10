@@ -31,7 +31,7 @@ app.use(express.json());
 app.use('/api/v1/especialidades', passport.authenticate('jwt', {session:false}), especialidadesRoutes);
 app.use('/api/v1/medicos', medicosRoutes);
 app.use('/api/v1/usuarios', usuariosRoutes);
-app.use('/api/v1/obras-sociales', obrasSocialesRoutes)
+app.use('/api/v1/obras-sociales', passport.authenticate('jwt', {session:false}), obrasSocialesRoutes)
 app.use("/api/v1/pacientes", pacientesRoutes);
 app.use('/api/v1/turnos-reservas', passport.authenticate('jwt', {session:false}), turnosReservasRoutes);
 app.use('/api/v1/auth', authRoutes);

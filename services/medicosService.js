@@ -38,10 +38,34 @@ export const medicosService = {
     modificarMedico: async (id, dataUpdate) => {
         await medicosService.obtenerPorId(id);
 
-        await medicosDb.update(id, dataUpdate);
+        const campos = [];
+        const valores = [];
 
+        if (dataUpdate.id_especialidad !== undefined) {
+            campos.push("id_especialidad = ?");
+            valores.push(dataUpdate.id_especialidad);
+        }
+        if (dataUpdate.matricula !== undefined) {
+            if (dataUpdate.matricula <= 0) throw new Error('Matrícula inválida');
+            campos.push("matricula = ?");
+            valores.push(dataUpdate.matricula);
+        }
+        if (dataUpdate.descripcion !== undefined) {
+            campos.push("descripcion = ?");
+            valores.push(dataUpdate.descripcion);
+        }
+        if (dataUpdate.valor_consulta !== undefined) {
+            if (dataUpdate.valor_consulta < 0) throw new Error('El valor no puede ser negativo');
+            campos.push("valor_consulta = ?");
+            valores.push(dataUpdate.valor_consulta);
+        }
+
+        if (campos.length === 0) throw new Error("No hay campos para actualizar");
+
+        await medicosDb.update(id, campos, valores);
+        
         cache.clear();
-
+        
         return await medicosDb.getById(id);
     },
 

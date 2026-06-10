@@ -55,47 +55,12 @@ export const usuariosDb = {
         return result.insertId;
     },
 
-    update: async (id, usuarioUpdate) => {
-        let campos = [];
-        let valores = [];
-
-        if (usuarioUpdate.documento !== undefined) {
-            campos.push("documento = ?");
-            valores.push(usuarioUpdate.documento);
-        }
-        if (usuarioUpdate.apellido !== undefined) {
-            campos.push("apellido = ?");
-            valores.push(usuarioUpdate.apellido);
-        }
-        if (usuarioUpdate.nombres !== undefined) {
-            campos.push("nombres = ?");
-            valores.push(usuarioUpdate.nombres);
-        }
-        if (usuarioUpdate.email !== undefined) {
-            campos.push("email = ?");
-            valores.push(usuarioUpdate.email);
-        }
-        if (usuarioUpdate.contrasenia !== undefined) {
-            campos.push("contrasenia = SHA2(?, 256)");
-            valores.push(usuarioUpdate.contrasenia);
-        }
-        if (usuarioUpdate.foto_path !== undefined) {
-            campos.push("foto_path = ?");
-            valores.push(usuarioUpdate.foto_path);
-        }
-        if (usuarioUpdate.rol !== undefined) {
-            campos.push("rol = ?");
-            valores.push(usuarioUpdate.rol);
-        }
-
-        if (campos.length > 0) {
-            valores.push(id);
-            const query = `UPDATE usuarios SET ${campos.join(", ")} WHERE id_usuario = ?`;
-            const [result] = await pool.execute(query, valores);
-            return result.affectedRows > 0;
-        }
+    update: async (id, campos, valores) => {
+        valores.push(id);
+        const query = `UPDATE usuarios SET ${campos.join(", ")} WHERE id_usuario = ?`;
         
-        return false;
+        const [result] = await pool.execute(query, valores);
+        return result.affectedRows > 0;
     },
 
     softDelete: async (id) => {
