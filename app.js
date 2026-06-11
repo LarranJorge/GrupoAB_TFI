@@ -13,6 +13,7 @@ import usuariosRoutes from './routes/v1/usuariosRoutes.js'
 import obrasSocialesRoutes from './routes/v1/obrasSocialesRoutes.js'
 import pacientesRoutes from './routes/v1/pacientesRoutes.js';
 import turnosReservasRoutes from './routes/v1/turnosReservasRoutes.js';
+import medicosObrasSocialesRoutes from './routes/v1/medicosObrasSocialesRoutes.js';
 import authRoutes from './routes/v1/authRoutes.js'
 
 const app = express();
@@ -29,11 +30,12 @@ app.use(express.json());
 
 
 app.use('/api/v1/especialidades', passport.authenticate('jwt', {session:false}), especialidadesRoutes);
-app.use('/api/v1/medicos', medicosRoutes);
+app.use('/api/v1/medicos', passport.authenticate('jwt', {session:false}), medicosRoutes);
 app.use('/api/v1/usuarios', usuariosRoutes);
 app.use('/api/v1/obras-sociales', passport.authenticate('jwt', {session:false}), obrasSocialesRoutes)
-app.use("/api/v1/pacientes", pacientesRoutes);
+app.use("/api/v1/pacientes", passport.authenticate('jwt', {session:false}), pacientesRoutes);
 app.use('/api/v1/turnos-reservas', passport.authenticate('jwt', {session:false}), turnosReservasRoutes);
+app.use('/api/v1/medicos-obras-sociales', passport.authenticate('jwt', {session:false}), medicosObrasSocialesRoutes);
 app.use('/api/v1/auth', authRoutes);
 
 app.use(errorHandler);
