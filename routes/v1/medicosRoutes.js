@@ -18,6 +18,7 @@ router.post('/', [
     check('matricula', 'El numero de matricula es obligatorio').notEmpty().isInt().isLength({ max: 30 }),
     check('descripcion', 'La descripcion es obligatoria').notEmpty().isLength({ max: 200 }),
     check('valor_consulta', 'El valor de la consulta es obligatorio').notEmpty().isFloat({min: 0}),
+    check('obras_sociales', 'Las obras sociales deben ser un arreglo de IDs').optional().isArray(),
     validarCampos
 ], medicosCtrl.createMedico);
 
