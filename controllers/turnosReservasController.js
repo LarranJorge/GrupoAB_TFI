@@ -2,37 +2,47 @@ import { turnosReservasService } from '../services/turnosReservasService.js';
 
 export const turnosReservasController = {
 
-    obtenerTodos: async (req, res, next) => {
+    obtenerPorMedico: async (req, res, next) => {
         try {
-            const turnos = await turnosReservasService.obtenerTodos(req.user);
-            res.status(200).json({
-                estado: true,
-                mensaje: 'Turnos encontrados.',
-                datos: turnos
-            });
+            const turnos = await turnosReservasService.obtenerPorMedico(req.user.id_usuario);
+            res.status(200).json({ estado: true, datos: turnos });
+
         } catch (error) {
             next(error);
         }
     },
 
-    crear: async (req, res, next) => {
+    obtenerPorPaciente: async (req, res, next) => {
         try {
-            const { id_medico, id_paciente, fecha_hora } = req.body;
-            const nuevoTurno = await turnosReservasService.crear({ id_medico, id_paciente, fecha_hora });
+            const turnos = await turnosReservasService.obtenerPorPaciente(req.user.id_usuario);
+            res.status(200).json({ estado: true, datos: turnos });
+            
+        } catch (error) { 
+            next(error);
+        }
+    },
 
+    crear: async (req, res, next) => {
+        try {            
+            const datosTurno = req.body;
+
+            const nuevoTurno = await turnosReservasService.crear(datosTurno);
+            
             if (!nuevoTurno) {
                 return res.status(400).json({
-                    estado: false,
+                    estado: false, 
                     mensaje: 'No se pudo crear el turno.'
                 });
             }
 
-            res.status(201).json({
+            return res.status(201).json({
                 estado: true,
-                mensaje: 'Turno creado.',
+                mensaje: 'Turno Creado.',
                 datos: nuevoTurno
             });
+
         } catch (error) {
+            console.log(`Error en POST /turnos-reservas: ${error}`);
             next(error);
         }
     },

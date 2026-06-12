@@ -6,13 +6,24 @@ import { autorizarUsuarios } from '../../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-router.get('/',
-    autorizarUsuarios([1, 2]),
-    turnosReservasController.obtenerTodos
+router.get('/medico/:id_medico',
+    autorizarUsuarios([1]),
+    [
+        check('id_medico').notEmpty().withMessage('El id_medico es obligatorio.')
+    ],
+    turnosReservasController.obtenerPorMedico
+);
+
+router.get('/paciente/:id_paciente',
+    autorizarUsuarios([2]),
+    [
+        check('id_paciente').notEmpty().withMessage('El id_paciente es obligatorio.')
+    ],
+    turnosReservasController.obtenerPorPaciente
 );
 
 router.post('/',
-    autorizarUsuarios([2, 3]),
+    autorizarUsuarios([1, 2]),
     [
         check('id_medico')
             .notEmpty().withMessage('El id_medico es obligatorio.')
@@ -40,7 +51,7 @@ router.put('/:id/atendido',
 );
 
 router.delete('/:id',
-    autorizarUsuarios([2, 3]),
+    autorizarUsuarios([3]),
     [
         param('id')
             .notEmpty().withMessage('El id es obligatorio.')

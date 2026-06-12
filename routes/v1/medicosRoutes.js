@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import apicache from 'apicache';
 import { check, param } from 'express-validator';
 import * as medicosCtrl from '../../controllers/medicosController.js'
 import { validarCampos } from '../../middlewares/validarCampos.js';
@@ -7,11 +6,8 @@ import { autorizarUsuarios } from '../../middlewares/authMiddleware.js';
 
 const router = Router();
 
-const cache = apicache.middleware;
-
 router.get('/',
     autorizarUsuarios([2, 3]),
-    cache('2 minutes'), 
     medicosCtrl.getMedicos);
 
 router.get('/:id',
@@ -48,9 +44,8 @@ router.put('/:id',
 
 router.delete('/:id',
     autorizarUsuarios([3]),
-    [
+    [ 
         param('id', 'El ID debe ser un número entero').isInt(),
-        validarCampos
     ],
     medicosCtrl.deleteMedico);
 

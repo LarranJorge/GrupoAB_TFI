@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { check, param } from 'express-validator';
 import * as mosCtrl from '../../controllers/medicosObrasSocialesController.js'
-import { validarCampos } from '../middlewares/validarCampos.js';
-import { autorizarUsuarios } from '../middlewares/authMiddleware.js';
+import { validarCampos } from '../../middlewares/validarCampos.js';
+import { autorizarUsuarios } from '../../middlewares/authMiddleware.js';
 
 const router = Router();
 
@@ -25,7 +25,7 @@ router.post('/',
 router.put('/:id',
     autorizarUsuarios([3]),
     [
-        param('id', 'El ID de la asociación debe ser un número entero').isInt(),
+        param('id', 'El ID del conjunto debe ser un número entero').isInt(),
         check('id_obra_social', 'El nuevo ID de la obra social es obligatorio').notEmpty().isInt(),
         validarCampos
     ],
@@ -34,7 +34,7 @@ router.put('/:id',
 router.delete('/:id',
     autorizarUsuarios([3]),
     [
-        param('id', 'El ID de la asociación debe ser un número entero').isInt(),
+        param('id', 'El ID del conjunto debe ser un número entero').isInt(),
         validarCampos
     ],
     mosCtrl.deleteAsociacion);

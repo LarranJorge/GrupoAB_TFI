@@ -15,7 +15,7 @@ export const authController = {
             
 
             const payload = {id_usuario: usuario.id_usuario, rol: usuario.rol}; 
-            const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+            const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '8h' });
 
             return res.json({
                 estado: true, 

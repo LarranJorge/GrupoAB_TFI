@@ -59,3 +59,19 @@ export const deleteUsuario = async (req, res, next) => {
         next(error);
     }
 };
+
+export const updateRolUsuario = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { rol } = req.body;
+        
+        await usuariosService.modificarRolUsuario(id, rol);
+
+        res.status(200).json({ 
+            estado: true, 
+            msg: `El rol del usuario ha sido actualizado a ${rol}`
+        });
+    } catch (error) {
+        next(error);
+    }
+};

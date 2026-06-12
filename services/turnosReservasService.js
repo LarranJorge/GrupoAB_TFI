@@ -10,12 +10,12 @@ const formatearNombre = (str) => {
 
 export const turnosReservasService = {
 
-    obtenerTodos: async (usuario) => {
-        if (usuario.rol === 1) {
-            return await turnosReservasDb.getByMedico(usuario.id_usuario);
-        } else {
-            return await turnosReservasDb.getByPaciente(usuario.id_usuario);
-        }
+    obtenerPorMedico: async (id_usuario_medico) => {
+        return await turnosReservasDb.getByMedico(id_usuario_medico);
+    },
+
+    obtenerPorPaciente: async (id_usuario_paciente) => {
+        return await turnosReservasDb.getByPaciente(id_usuario_paciente);
     },
 
     obtenerPorId: async (id) => {
@@ -29,13 +29,21 @@ export const turnosReservasService = {
     },
 
     crear: async (data) => {
+
+        const fechaTurno = new Date(data.fecha_hora);
+        const ahora = new Date();
+
+        if (fechaTurno <= ahora) {
+            throw new Error("La fecha y hora del turno debe ser posterior a la actual.");
+        }
+
         const medico = await medicosService.obtenerPorId(data.id_medico);
         const paciente = await pacientesService.obtenerPorId(data.id_paciente);
         const obraSocial = await obrasSocialesService.obtenerPorId(paciente.id_obra_social);
 
         let valor = medico.valor_consulta;
 
-        if (obraSocial.es_particular === 0) {
+        if (obraSocial.es_particular == 0) {
             valor = valor - (obraSocial.porcentaje_descuento * valor);
         }
 
@@ -54,11 +62,10 @@ export const turnosReservasService = {
 
     marcarAtendido: async (id) => {
         await turnosReservasService.obtenerPorId(id);
-
         const resultado = await turnosReservasDb.marcarAtendido(id);
         if (!resultado) {
-            const error = new Error('Turno no encontrado');
-            error.status = 404;
+            const error = new Error('Error al actualizar el estado del turno.');
+            error.status = 500;
             throw error;
         }
         return resultado;

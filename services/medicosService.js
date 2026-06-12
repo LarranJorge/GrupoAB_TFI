@@ -1,10 +1,9 @@
 import { medicosDb } from '../database/medicosDb.js';
-import apicache from 'apicache';
-
-const cache = apicache.middleware;
 
 export const medicosService = {
+    
     obtenerTodos: async (id_especialidad) => {
+        
         if (id_especialidad) {
             return await medicosDb.getByEspecialidad(id_especialidad);
         }
@@ -19,7 +18,7 @@ export const medicosService = {
             error.status = 404;
             throw error;
         }
-        
+    
         return medico;
     },
 
@@ -33,12 +32,11 @@ export const medicosService = {
 
         const id = await medicosDb.create(data);
 
-        cache.clear();
-
         return await medicosDb.getById(id);
     },
 
     modificarMedico: async (id, dataUpdate) => {
+
         await medicosService.obtenerPorId(id);
 
         const campos = [];
@@ -67,15 +65,11 @@ export const medicosService = {
 
         await medicosDb.update(id, campos, valores);
         
-        cache.clear();
-        
         return await medicosDb.getById(id);
     },
 
     eliminarMedico: async (id) => {
         await medicosService.obtenerPorId(id);
-
-        cache.clear();
         
         return await medicosDb.softDelete(id);
     }

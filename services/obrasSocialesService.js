@@ -1,8 +1,6 @@
 import { obrasSocialesDb } from '../database/obrasSocialesDb.js';
 import apicache from 'apicache';
 
-const cache = apicache.middleware;
-
 export const obrasSocialesService = {
     obtenerTodos: async () => {
         return await obrasSocialesDb.getAll();
@@ -31,7 +29,7 @@ export const obrasSocialesService = {
 
         const id = await obrasSocialesDb.create(data);
 
-        cache.clear();
+        apicache.clear();
 
         return await obrasSocialesDb.getById(id);
     },
@@ -75,16 +73,20 @@ export const obrasSocialesService = {
 
         if (campos.length === 0) throw new Error("No hay datos para actualizar");
 
-        cache.clear();
+        const result = await obrasSocialesDb.update(id, campos, valores);
+        
+        apicache.clear();
 
-        return await obrasSocialesDb.update(id, campos, valores);
+        return result;
     },
 
     eliminarObraSocial: async (id) => {
         await obrasSocialesService.obtenerPorId(id);
 
-        cache.clear();
+        const result = await obrasSocialesDb.softDelete(id);
         
-        return await obrasSocialesDb.softDelete(id);
+        apicache.clear();
+        
+        return result;
     }
 };

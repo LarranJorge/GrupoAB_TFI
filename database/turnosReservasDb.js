@@ -3,13 +3,18 @@ import { pool } from './conexion.js';
 export const turnosReservasDb = {
 
     create: async (turnoReserva) => {
+
         const { id_medico, id_paciente, id_obra_social, fecha_hora, valor_total } = turnoReserva;
         const query = `
-            INSERT INTO turnos_reservas (id_medico, id_paciente, id_obra_social, fecha_hora, valor_total)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO turnos_reservas (id_medico, id_paciente, id_obra_social, fecha_hora, valor_total, atendido)
+            VALUES (?, ?, ?, ?, ?, 0)
         `;
-        const [result] = await pool.execute(query, [id_medico, id_paciente, id_obra_social, fecha_hora, valor_total]);
-        if (result.affectedRows === 0) return null;
+        
+        const [result] = await pool.execute(query, [id_medico, id_paciente, id_obra_social, fecha_hora, valor_total]);     
+        
+        if (result.affectedRows === 0) {
+            return null;
+        }
         return result.insertId;
     },
 

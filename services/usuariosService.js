@@ -33,8 +33,9 @@ export const usuariosService = {
     registrarUsuario: async (data) => {
         if (data.nombres) data.nombres = formatearNombre(data.nombres);
         if (data.apellido) data.apellido = formatearNombre(data.apellido);
-
         if (data.email) data.email = data.email.trim().toLowerCase();
+
+        data.rol = 2;
 
         const id = await usuariosDb.create(data);
         return await usuariosDb.getById(id);
@@ -69,6 +70,15 @@ export const usuariosService = {
 
         if (campos.length === 0) throw new Error("No hay datos para actualizar");
 
+        return await usuariosDb.update(id, campos, valores);
+    },
+
+    modificarRolUsuario: async (id, nuevoRol) => {
+        await usuariosService.obtenerPorId(id);
+        
+        const campos = ["rol = ?"];
+        const valores = [nuevoRol];
+        
         return await usuariosDb.update(id, campos, valores);
     },
 

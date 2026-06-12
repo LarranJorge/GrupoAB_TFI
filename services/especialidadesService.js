@@ -1,8 +1,6 @@
 import { especialidadesDb } from '../database/especialidadesDb.js';
 import apicache from 'apicache';
 
-const cache = apicache.middleware;
-
 export const especialidadesService = {
     obtenerTodos: async () => {
         return await especialidadesDb.getAll();
@@ -22,16 +20,18 @@ export const especialidadesService = {
 
     registrarEspecialidad: async (data) => {
         const nombreNormalizado = data.nombre.trim().toUpperCase();
-
         const id = await especialidadesDb.create(nombreNormalizado);
 
-        cache.clear();
+        try {
+            apicache.clear();
+        } catch (error) {
+            console.warn("No se pudo limpiar el caché, pero la operación fue exitosa.", error);
+        }
 
         return await especialidadesDb.getById(id);
     },
 
     modificarEspecialidad: async (id, dataUpdate) => {
-
         await especialidadesService.obtenerPorId(id);
 
         let nombreParaActualizar = dataUpdate.nombre;
@@ -42,16 +42,23 @@ export const especialidadesService = {
 
         await especialidadesDb.update(id, nombreParaActualizar);
 
-        cache.clear();
+        try {
+            apicache.clear();
+        } catch (error) {
+            console.warn("No se pudo limpiar el caché, pero la operación fue exitosa.", error);
+        }
 
         return await especialidadesDb.getById(id);
-
     },  
 
     eliminarEspecialidad: async (id) => {
         await especialidadesService.obtenerPorId(id);
 
-        cache.clear();
+        try {
+            apicache.clear();
+        } catch (error) {
+            console.warn("No se pudo limpiar el caché, pero la operación fue exitosa.", error);
+        }
 
         return await especialidadesDb.softDelete(id);
     }
