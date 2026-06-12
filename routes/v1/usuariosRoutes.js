@@ -5,6 +5,172 @@ import * as usuariosCtrl from '../../controllers/usuariosController.js';
 import { validarCampos } from '../../middlewares/validarCampos.js';
 import { autorizarUsuarios } from '../../middlewares/authMiddleware.js';
 
+/**
+ * @swagger
+ * /api/v1/usuarios:
+ *   get:
+ *     tags:
+ *       - Usuarios
+ *     summary: Obtener todos los usuarios.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de usuarios.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 estado:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Usuario'
+ *       401:
+ *         description: No autorizado.
+ *       403:
+ *         description: Acceso denegado.
+ */
+/**
+ * @swagger
+ * /api/v1/usuarios:
+ *   post:
+ *     tags:
+ *       - Usuarios
+ *     summary: Crear un usuario.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UsuarioCreate'
+ *     responses:
+ *       201:
+ *         description: Usuario creado.
+ *       400:
+ *         description: Datos inválidos.
+ *       500:
+ *         description: Error interno.
+ */
+/**
+ * @swagger
+ * /api/v1/usuarios/{id}:
+ *   get:
+ *     tags:
+ *       - Usuarios
+ *     summary: Obtener usuario por ID.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Usuario encontrado.
+ *       400:
+ *         description: ID inválido.
+ *       401:
+ *         description: No autorizado.
+ *       403:
+ *         description: Acceso denegado.
+ *       404:
+ *         description: No encontrado.
+ */
+/**
+ * @swagger
+ * /api/v1/usuarios/{id}:
+ *   put:
+ *     tags:
+ *       - Usuarios
+ *     summary: Actualizar un usuario.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UsuarioUpdate'
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Usuario actualizado.
+ *       400:
+ *         description: Datos inválidos.
+ *       500:
+ *         description: Error interno.
+ */
+/**
+ * @swagger
+ * /api/v1/usuarios/{id}/rol:
+ *   put:
+ *     tags:
+ *       - Usuarios
+ *     summary: Actualizar rol de un usuario.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               rol:
+ *                 type: integer
+ *                 example: 3
+ *             required:
+ *               - rol
+ *     responses:
+ *       200:
+ *         description: Rol actualizado.
+ *       400:
+ *         description: Datos inválidos.
+ *       401:
+ *         description: No autorizado.
+ *       403:
+ *         description: Acceso denegado.
+ */
+/**
+ * @swagger
+ * /api/v1/usuarios/{id}:
+ *   delete:
+ *     tags:
+ *       - Usuarios
+ *     summary: Eliminar un usuario.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Usuario eliminado.
+ *       400:
+ *         description: ID inválido.
+ *       500:
+ *         description: Error interno.
+ */
 const router = Router();
 
 router.get('/',

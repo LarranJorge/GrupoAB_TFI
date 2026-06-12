@@ -1,11 +1,13 @@
 import express from 'express';
 import morgan from 'morgan';
 import passport from "passport";
+import swaggerUi from 'swagger-ui-express';
 
 import { errorHandler } from './middlewares/errorMiddleware.js';
 import { fileLogger } from './middlewares/loggerMiddleware.js';
 
 import { estrategia, validacion} from './config/passport.js';
+import { swaggerSpec } from './config/swagger.js';
 
 import especialidadesRoutes from './routes/v1/especialidadesRoutes.js';
 import medicosRoutes from './routes/v1/medicosRoutes.js';
@@ -28,6 +30,7 @@ app.use(fileLogger);
 
 app.use(express.json());
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/api/v1/especialidades', passport.authenticate('jwt', {session:false}), especialidadesRoutes);
 app.use('/api/v1/medicos', passport.authenticate('jwt', {session:false}), medicosRoutes);

@@ -3,19 +3,48 @@ import { pool } from './conexion.js';
 export const turnosReservasDb = {
 
     create: async (turnoReserva) => {
-
         const { id_medico, id_paciente, id_obra_social, fecha_hora, valor_total } = turnoReserva;
-        const query = `
-            INSERT INTO turnos_reservas (id_medico, id_paciente, id_obra_social, fecha_hora, valor_total, atendido)
-            VALUES (?, ?, ?, ?, ?, 0)
-        `;
-        
-        const [result] = await pool.execute(query, [id_medico, id_paciente, id_obra_social, fecha_hora, valor_total]);     
-        
-        if (result.affectedRows === 0) {
-            return null;
+        const connection = await pool.getConnection();
+
+        try {
+            await connection.beginTransaction();
+
+            const queryCheck = `
+                SELECT id_turno_reserva
+                FROM turnos_reservas
+                WHERE id_medico = ?
+                  AND fecha_hora = ?
+                  AND activo = 1
+                FOR UPDATE
+            `;
+            const [existing] = await connection.execute(queryCheck, [id_medico, fecha_hora]);
+
+            if (existing.length > 0) {
+                await connection.rollback();
+                const error = new Error('El médico ya tiene un turno reservado en ese horario');
+                error.status = 409;
+                throw error;
+            }
+
+            const queryInsert = `
+                INSERT INTO turnos_reservas (id_medico, id_paciente, id_obra_social, fecha_hora, valor_total, atendido)
+                VALUES (?, ?, ?, ?, ?, 0)
+            `;
+            const [result] = await connection.execute(queryInsert, [id_medico, id_paciente, id_obra_social, fecha_hora, valor_total]);
+
+            await connection.commit();
+
+            if (result.affectedRows === 0) {
+                return null;
+            }
+            return result.insertId;
+
+        } catch (error) {
+            await connection.rollback();
+            throw error;
+        } finally {
+            connection.release();
         }
-        return result.insertId;
     },
 
     getByMedico: async (id_usuario) => {

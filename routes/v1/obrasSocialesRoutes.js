@@ -5,6 +5,155 @@ import * as obrasSocialesCtrl from '../../controllers/obrasSocialesController.js
 import { validarCampos } from '../../middlewares/validarCampos.js';
 import { autorizarUsuarios } from '../../middlewares/authMiddleware.js';
 
+/**
+ * @swagger
+ * /api/v1/obras-sociales:
+ *   get:
+ *     tags:
+ *       - ObrasSociales
+ *     summary: Obtener lista de obras sociales.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de obras sociales.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 estado:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/ObraSocial'
+ *       401:
+ *         description: No autorizado.
+ *       403:
+ *         description: Acceso denegado.
+ */
+/**
+ * @swagger
+ * /api/v1/obras-sociales:
+ *   post:
+ *     tags:
+ *       - ObrasSociales
+ *     summary: Crear una obra social.
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ObraSocialCreate'
+ *     responses:
+ *       201:
+ *         description: Obra social creada.
+ *       400:
+ *         description: Datos inválidos.
+ *       401:
+ *         description: No autorizado.
+ *       403:
+ *         description: Acceso denegado.
+ */
+/**
+ * @swagger
+ * /api/v1/obras-sociales/{id}:
+ *   get:
+ *     tags:
+ *       - ObrasSociales
+ *     summary: Obtener obra social por ID.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la obra social
+ *     responses:
+ *       200:
+ *         description: Obra social encontrada.
+ *       401:
+ *         description: No autorizado.
+ *       403:
+ *         description: Acceso denegado.
+ *       404:
+ *         description: No encontrada.
+ */
+/**
+ * @swagger
+ * /api/v1/obras-sociales/{id}:
+ *   put:
+ *     tags:
+ *       - ObrasSociales
+ *     summary: Actualizar una obra social.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la obra social
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *               descripcion:
+ *                 type: string
+ *               porcentaje_descuento:
+ *                 type: number
+ *               es_particular:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Obra social actualizada.
+ *       400:
+ *         description: Datos inválidos.
+ *       401:
+ *         description: No autorizado.
+ *       403:
+ *         description: Acceso denegado.
+ *       404:
+ *         description: No encontrada.
+ */
+/**
+ * @swagger
+ * /api/v1/obras-sociales/{id}:
+ *   delete:
+ *     tags:
+ *       - ObrasSociales
+ *     summary: Eliminar una obra social.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la obra social
+ *     responses:
+ *       200:
+ *         description: Obra social eliminada.
+ *       401:
+ *         description: No autorizado.
+ *       403:
+ *         description: Acceso denegado.
+ *       404:
+ *         description: No encontrada.
+ */
 const router = Router();
 
 const cache = apicache.middleware;
