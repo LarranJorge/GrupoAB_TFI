@@ -4,6 +4,7 @@ import { check, param } from 'express-validator';
 import * as usuariosCtrl from '../../controllers/usuariosController.js';
 import { validarCampos } from '../../middlewares/validarCampos.js';
 import { autorizarUsuarios } from '../../middlewares/authMiddleware.js';
+import { upload } from '../../middlewares/uploadMiddleware.js';
 
 /**
  * @swagger
@@ -188,26 +189,34 @@ router.get('/:id',
     ],
     usuariosCtrl.getUsuariosById);
 
-router.post('/', [
-    check('documento', 'El numero de documento es obligatorio').notEmpty().isInt(),
-    check('apellido', 'El apellido es obligatorio').notEmpty().isLength({ max: 30 }),
-    check('nombres', 'El nombre o los nombres son obligatorios').notEmpty().isLength({ max: 30 }),
-    check('email', 'El email es obligatorio').notEmpty(),
-    check('contrasenia', 'La contraseña es obligatoria').notEmpty(),
-    check('foto_path', 'Cargue una foto'),
-    validarCampos
-], usuariosCtrl.createUsuario);
+router.post('/',
+    upload.single('foto'),
+    [
+        check('documento', 'El numero de documento es obligatorio').notEmpty().isInt(),
+        check('apellido', 'El apellido es obligatorio').notEmpty().isLength({ max: 30 }),
+        check('nombres', 'El nombre o los nombres son obligatorios').notEmpty().isLength({ max: 30 }),
+        check('email', 'El email es obligatorio').notEmpty(),
+        check('contrasenia', 'La contraseña es obligatoria').notEmpty(),
+        validarCampos
+    ],
+    usuariosCtrl.createUsuario
+);
 
-router.put('/:id', [
-    param('id', 'El ID debe ser un número entero').isInt(),
-    check('documento', 'El numero de documento es obligatorio').optional().isInt(),
-    check('apellido', 'El apellido es obligatorio').optional().isLength({ max: 30 }),
-    check('nombres', 'El nombre o los nombres son obligatorios').optional().isLength({ max: 30 }),
-    check('email', 'El email es obligatorio').optional(),
-    check('contrasenia', 'La contraseña es obligatoria').optional(),
-    check('foto_path', 'Cargue una foto').optional(),
-    validarCampos
-], usuariosCtrl.updateUsuario);
+router.put('/:id',
+    passport.authenticate('jwt', {session:false}),
+    autorizarUsuarios([2]),
+    upload.single('foto'),
+    [
+        param('id', 'El ID debe ser un número entero').isInt(),
+        check('documento', 'Ingrese su numero de documento').optional().isInt(),
+        check('apellido', 'Ingrese su apellido').optional().isLength({ max: 30 }),
+        check('nombres', 'Ingrese su o sus nombres').optional().isLength({ max: 30 }),
+        check('email', 'Ingrese su email').optional(),
+        check('contrasenia', 'Ingrese su contraseña').optional(),
+        validarCampos
+    ],
+    usuariosCtrl.updateUsuario
+);
 
 router.put('/:id/rol',
     passport.authenticate('jwt', {session:false}),

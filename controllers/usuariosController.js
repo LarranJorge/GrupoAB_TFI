@@ -22,6 +22,13 @@ export const getUsuariosById = async (req, res, next) => {
 
 export const createUsuario = async (req, res, next) => {
     try {
+
+        if (req.file) {
+            req.body.foto_path = `/uploads/${req.file.filename}`;
+        } else {
+            req.body.foto_path = null; 
+        }
+
         const nuevoUsuario = await usuariosService.registrarUsuario(req.body);
         
         res.status(201).json({ 
@@ -37,6 +44,11 @@ export const createUsuario = async (req, res, next) => {
 export const updateUsuario = async (req, res, next) => {
     try {
         const { id } = req.params;
+        
+        if (req.file) {
+            req.body.foto_path = `/uploads/${req.file.filename}`;
+        }
+
         const actualizado = await usuariosService.modificarUsuario(id, req.body);
 
         res.status(200).json({ 

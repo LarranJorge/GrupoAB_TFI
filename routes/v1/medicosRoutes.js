@@ -231,10 +231,10 @@ router.put('/:id',
     autorizarUsuarios([3]),
     [
         param('id', 'El ID debe ser un número entero').isInt(),
-        check('id_especialidad', 'El ID de la especialidad es obligatorio').optional().isInt(),
-        check('matricula', 'El numero de matricula es obligatorio').optional().isInt().isLength({ max: 30 }),
-        check('descripcion', 'La descripcion es obligatoria').optional().isLength({ max: 200 }),
-        check('valor_consulta', 'El valor de la consulta es obligatorio').optional().isFloat({min: 0}),
+        check('id_especialidad', 'Ingrese el ID de su especialidad').optional().isInt(),
+        check('matricula', 'Ingrese su numero de matricula').optional().isInt().isLength({ max: 30 }),
+        check('descripcion', 'Ingrese una descripcion').optional().isLength({ max: 200 }),
+        check('valor_consulta', 'Ingrese el monto de la consulta con decimales separados por un . y sin el simbolo $').optional().isFloat({min: 0}),
         validarCampos
     ],
     medicosCtrl.updateMedico);

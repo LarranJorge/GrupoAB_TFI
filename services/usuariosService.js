@@ -68,6 +68,11 @@ export const usuariosService = {
             valores.push(dataUpdate.contrasenia);
         }
 
+        if (dataUpdate.foto_path !== undefined) {
+            campos.push("foto_path = ?");
+            valores.push(dataUpdate.foto_path);
+        }
+
         if (campos.length === 0) throw new Error("No hay datos para actualizar");
 
         return await usuariosDb.update(id, campos, valores);

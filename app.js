@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import morgan from 'morgan';
 import passport from "passport";
 import swaggerUi from 'swagger-ui-express';
@@ -16,10 +17,13 @@ import obrasSocialesRoutes from './routes/v1/obrasSocialesRoutes.js'
 import pacientesRoutes from './routes/v1/pacientesRoutes.js';
 import turnosReservasRoutes from './routes/v1/turnosReservasRoutes.js';
 import medicosObrasSocialesRoutes from './routes/v1/medicosObrasSocialesRoutes.js';
-import authRoutes from './routes/v1/authRoutes.js'
+import authRoutes from './routes/v1/authRoutes.js';
+import informesRoutes from './routes/v1/informesRoutes.js';
 
 const app = express();
 const port = process.env.PUERTO || 3000;
+
+app.use(cors());
 
 passport.use('local', estrategia);
 passport.use('jwt', validacion);
@@ -40,6 +44,7 @@ app.use("/api/v1/pacientes", passport.authenticate('jwt', {session:false}), paci
 app.use('/api/v1/turnos-reservas', passport.authenticate('jwt', {session:false}), turnosReservasRoutes);
 app.use('/api/v1/medicos-obras-sociales', passport.authenticate('jwt', {session:false}), medicosObrasSocialesRoutes);
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/informes', passport.authenticate('jwt', {session:false}), informesRoutes);
 
 app.use(errorHandler);
 
