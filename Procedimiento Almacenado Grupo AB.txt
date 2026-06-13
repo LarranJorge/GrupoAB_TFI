@@ -1,0 +1,13 @@
+DELIMITER //
+
+CREATE PROCEDURE generar_estadisticas_turnos()
+BEGIN
+    SELECT 
+        (SELECT COUNT(*) FROM turnos_reservas) AS total_turnos,
+        (SELECT COUNT(*) FROM turnos_reservas WHERE atendido = 1) AS turnos_atendidos,
+        (SELECT COUNT(*) FROM pacientes) AS total_pacientes,
+        (SELECT COUNT(*) FROM medicos) AS total_medicos,
+        (SELECT COUNT(*) FROM obras_sociales) AS total_obras_sociales;
+END //
+
+DELIMITER ;
