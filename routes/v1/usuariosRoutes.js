@@ -231,9 +231,12 @@ router.put('/:id/rol',
     usuariosCtrl.updateRolUsuario
 );
 
-router.delete('/:id', [
-    param('id', 'El ID debe ser un número entero').isInt(),
-    validarCampos
-], usuariosCtrl.deleteUsuario);
+router.delete('/:id',
+    autorizarUsuarios([3])
+    [
+        param('id', 'El ID debe ser un número entero').isInt(),
+        validarCampos
+    ],
+    usuariosCtrl.deleteUsuario);
 
 export default router;
