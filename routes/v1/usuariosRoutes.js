@@ -197,6 +197,7 @@ router.post('/',
         check('nombres', 'El nombre o los nombres son obligatorios').notEmpty().isLength({ max: 30 }),
         check('email', 'El email es obligatorio').notEmpty(),
         check('contrasenia', 'La contraseña es obligatoria').notEmpty(),
+        check('photo_path', 'Ingrese una foto de perfil').optional(),
         validarCampos
     ],
     usuariosCtrl.createUsuario
@@ -213,6 +214,7 @@ router.put('/:id',
         check('nombres', 'Ingrese su o sus nombres').optional().isLength({ max: 30 }),
         check('email', 'Ingrese su email').optional(),
         check('contrasenia', 'Ingrese su contraseña').optional(),
+        check('photo_path', 'Ingrese una foto de perfil').optional(),
         validarCampos
     ],
     usuariosCtrl.updateUsuario
