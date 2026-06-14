@@ -171,7 +171,7 @@ router.get('/paciente/:id_paciente',
 );
 
 router.post('/',
-    autorizarUsuarios([1, 2]),
+    autorizarUsuarios([2, 3]),
     [
         check('id_medico')
             .notEmpty().withMessage('El id_medico es obligatorio.')
