@@ -123,6 +123,7 @@ import { autorizarUsuarios } from '../../middlewares/authMiddleware.js';
 const router = Router();
 
 router.get('/:id_medico',
+    autorizarUsuarios([2]),
     [
         param('id_medico', 'El ID del médico debe ser un número entero').isInt(),
         validarCampos
