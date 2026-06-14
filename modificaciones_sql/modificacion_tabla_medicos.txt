@@ -1,0 +1,7 @@
+Para el correcto funcionamiento del BREAD para la entidad medicos, compie y pegue lo siguiente en la pestaña 'SQL' de la base de datos:
+
+ALTER TABLE medicos 
+ADD COLUMN activo TINYINT(1) DEFAULT 1;
+
+Con esto la tabla medicos ahora contendra el campo 'activo' 
+y la funcion 'deleteMedico' realizara el soft delete para 'dar de baja' a un medico.

@@ -77,5 +77,18 @@ Para probar la carga de imágenes siga los siguientes pasos en Bruno:
 
 ![Guía de registro](assets/guia_registro.png)
 
+## Modificaciones de la base de datos.
+para el correcto funcionamiento de este proyecto se sugiere añadir los siguientes cambios:
+### archivos de configuracion:
+Los archivos de configuracion se encuentran en la carpeta `modificaciones_sql` y son:
+- `modificacion_tabla_medicos` para aladir el campo `activo` y asi garantizar el correcto funcionamiento del borrado logico (soft delete).
+- `procedimiento_almacenado` para la correcta obtencion de datos estadisticos de la API y la creacion del PDF.
 
-Última actualización: 13/06/2026
+**Instrucciones:**
+1. Abra su cliente de bases de datos.
+2. Seleccione/importe la base de datos `prog3_turnos`.
+3. Copie y pegue el contenido de los archivos `.txt` en la pestaña **SQL**.
+4. aceptar/aplicar los cambios.
+
+
+Última actualización: 14/06/2026

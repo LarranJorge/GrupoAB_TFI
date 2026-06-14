@@ -1,3 +1,5 @@
+Procedimiento almacenado elegido por el grupo AB:
+
 DELIMITER //
 
 CREATE PROCEDURE generar_estadisticas_turnos()
