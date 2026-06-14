@@ -1,9 +1,17 @@
+import fs from 'fs';
 import multer from 'multer';
 import path from 'path';
 
+const uploadDir = path.join(process.cwd(), 'uploads');
+
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'uploads/');
+        fs.mkdir(uploadDir, { recursive: true }, (err) => {
+            if (err) {
+                return cb(err);
+            }
+            cb(null, uploadDir);
+        });
     },
     filename: function (req, file, cb) {
 
