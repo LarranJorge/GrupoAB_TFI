@@ -144,12 +144,17 @@ import { autorizarUsuarios } from '../../middlewares/authMiddleware.js';
  */
 const router = Router();
 
-router.get("/", pacientesCtrl.getPacientes);
+router.get("/",
+  autorizarUsuarios([3]),
+  pacientesCtrl.getPacientes);
 
-router.get("/:id", [ 
-  param("id", "El ID debe ser un número entero").isInt(),
-  validarCampos
-], pacientesCtrl.getPacienteById);
+router.get("/:id",
+  autorizarUsuarios([3]),
+  [ 
+    param("id", "El ID debe ser un número entero").isInt(),
+    validarCampos
+  ],
+  pacientesCtrl.getPacienteById);
 
 router.post("/",
   autorizarUsuarios([3]),
