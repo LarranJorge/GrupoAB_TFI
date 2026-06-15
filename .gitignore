@@ -141,3 +141,7 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Ignorar archivos subidos por usuarios (Multer), pero mantener la carpeta
+uploads/*
+!uploads/.gitkeep
