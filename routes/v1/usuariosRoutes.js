@@ -232,11 +232,12 @@ router.put('/:id/rol',
 );
 
 router.delete('/:id',
-    autorizarUsuarios([3])
+    autorizarUsuarios([3]),
     [
         param('id', 'El ID debe ser un número entero').isInt(),
         validarCampos
     ],
-    usuariosCtrl.deleteUsuario);
+    usuariosCtrl.deleteUsuario
+);
 
 export default router;
