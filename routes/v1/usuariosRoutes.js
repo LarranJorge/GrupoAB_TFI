@@ -157,6 +157,8 @@ import { upload } from '../../middlewares/uploadMiddleware.js';
  *     tags:
  *       - Usuarios
  *     summary: Eliminar un usuario.
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
