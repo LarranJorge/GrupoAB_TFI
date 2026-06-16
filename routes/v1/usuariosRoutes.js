@@ -91,6 +91,8 @@ import { upload } from '../../middlewares/uploadMiddleware.js';
  *     tags:
  *       - Usuarios
  *     summary: Actualizar un usuario.
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -207,7 +209,7 @@ router.post('/',
 
 router.put('/:id',
     passport.authenticate('jwt', {session:false}),
-    autorizarUsuarios([2]),
+    autorizarUsuarios([2, 3]),
     upload.single('foto'),
     [
         param('id', 'El ID debe ser un número entero').isInt(),
