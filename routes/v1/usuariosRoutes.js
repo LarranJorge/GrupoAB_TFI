@@ -232,6 +232,7 @@ router.put('/:id/rol',
 );
 
 router.delete('/:id',
+    passport.authenticate('jwt', {session:false}),
     autorizarUsuarios([3]),
     [
         param('id', 'El ID debe ser un número entero').isInt(),
