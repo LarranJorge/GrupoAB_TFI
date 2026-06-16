@@ -77,6 +77,8 @@ Para probar la carga de imágenes siga los siguientes pasos en Bruno:
 
 ![Guía de registro](assets/guia_registro.png)
 
+**IMPORTANTE:** Desde Swagger no se puede cargar una foto, se deben dejar las comillas vacias para el correcto funcionamiento del endpoint.
+
 ## Modificaciones de la base de datos.
 para el correcto funcionamiento de este proyecto se sugiere añadir los siguientes cambios:
 ### archivos de configuracion:
