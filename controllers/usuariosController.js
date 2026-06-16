@@ -26,7 +26,7 @@ export const createUsuario = async (req, res, next) => {
         if (req.file) {
             req.body.foto_path = `/uploads/${req.file.filename}`;
         } else {
-            req.body.foto_path = null; 
+            req.body.foto_path = ''; 
         }
 
         const nuevoUsuario = await usuariosService.registrarUsuario(req.body);
