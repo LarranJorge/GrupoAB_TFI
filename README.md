@@ -90,5 +90,6 @@ Los archivos de configuracion se encuentran en la carpeta `modificaciones_sql` y
 3. Copie y pegue el contenido de los archivos `.txt` en la pestaña **SQL**.
 4. aceptar/aplicar los cambios.
 
+**PARA MAYOR COMODIDAD AÑADIMOS LA BASE DE DATOS DENTRO DE LA CARPETA `modificaciones_sql`.**
 
-Última actualización: 14/06/2026
+Última actualización: 16/06/2026
