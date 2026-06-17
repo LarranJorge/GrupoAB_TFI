@@ -94,4 +94,7 @@ Los archivos de configuracion se encuentran en la carpeta `modificaciones_sql` y
 
 **PARA MAYOR COMODIDAD AÑADIMOS LA BASE DE DATOS DENTRO DE LA CARPETA `modificaciones_sql`.**
 
+## Link al video de presentacion del proyecto:
+https://drive.google.com/drive/folders/1QbHgaOLpwzP3mS1hjHKOYgOQUn8oIoUy?usp=sharing
+
 Última actualización: 16/06/2026
